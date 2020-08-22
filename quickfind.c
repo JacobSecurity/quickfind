@@ -10,7 +10,7 @@ int Error(const char *msg) {
 };
 
 int is_binary(char *proc_name, char *argument, PPROCESSENTRY32 current_proc) {
-	if (!_stricmp(proc_name,argument)) {
+	if (strstr(proc_name,argument)!=NULL) {
 		printf("\nExecutable found!\n");
 		printf("Name:%s\nPID:%u\nPPID:%u\n",current_proc->szExeFile,current_proc->th32ProcessID,current_proc->th32ParentProcessID);
 		return 0;
@@ -20,7 +20,7 @@ int is_binary(char *proc_name, char *argument, PPROCESSENTRY32 current_proc) {
 };
 
 int main(int argc, char** argv) {
-
+	
 	if (argc < 2) {
 		printf("Usage: %s <name of executable>\n",argv[0]);
 		getchar();
