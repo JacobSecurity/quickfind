@@ -13,7 +13,7 @@ int Error(const char* msg) {
 void create_dump(DWORD pid, char* process_name) {
     HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, 1, pid);
     char str_pid[256];
-    sprintf_s(str_pid, 256, "%d.dmp", pid);
+    sprintf_s(str_pid, 256, "%s.%d.dmp", process_name,pid);
 
     if (hProc == NULL) {
         Error("Could not get a handle to process\n");
@@ -42,6 +42,14 @@ void create_dump(DWORD pid, char* process_name) {
 };
 
 int is_binary(char* proc_name, char* argument, PPROCESSENTRY32 current_proc) {
+    for (int i = 0; proc_name[i]; i++) {
+        proc_name[i] = tolower(proc_name[i]);
+    }
+
+    for (int i = 0; argument[i]; i++) {
+        argument[i] = tolower(argument[i]);
+    }
+
     if (strstr(proc_name, argument) != NULL) {
         printf("\nExecutable found!\n");
         printf("Name:%s\nPID:%u\nPPID:%u\n", current_proc->szExeFile, current_proc->th32ProcessID, current_proc->th32ParentProcessID);
